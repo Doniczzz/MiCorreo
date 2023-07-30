@@ -18,7 +18,7 @@ class LoginScreenModel extends FlutterFlowModel {
   TextEditingController? textController2;
   late bool passwordVisibility;
   String? Function(BuildContext, String?)? textController2Validator;
-  // Stores action output result for [Backend Call - API (TEST)] action in Button widget.
+  // Stores action output result for [Backend Call - API (authentication)] action in Button widget.
   ApiCallResponse? loginUser;
 
   /// Initialization and disposal methods.
