@@ -53,6 +53,14 @@ class AuthenticationCall {
         response,
         r'''$.access_token''',
       );
+  dynamic expireUnix(dynamic response) => getJsonField(
+        response,
+        r'''$.expires_in''',
+      );
+  dynamic refreshToken(dynamic response) => getJsonField(
+        response,
+        r'''$.refresh_token''',
+      );
 }
 
 class EndSessionCall {
