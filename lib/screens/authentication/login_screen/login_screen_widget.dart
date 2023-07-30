@@ -1,9 +1,7 @@
 import '/backend/api_requests/api_calls.dart';
-import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -203,28 +201,6 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                         password: _model.textController2.text,
                       );
                       if ((_model.loginUser?.succeeded ?? true)) {
-                        setState(() {
-                          FFAppState().sessionInfo = SessionInfoStruct(
-                            accessToken:
-                                AuthenticationApiCallsGroup.authenticationCall
-                                    .token(
-                                      (_model.loginUser?.jsonBody ?? ''),
-                                    )
-                                    .toString(),
-                            refreshToken:
-                                AuthenticationApiCallsGroup.authenticationCall
-                                    .refreshToken(
-                                      (_model.loginUser?.jsonBody ?? ''),
-                                    )
-                                    .toString(),
-                            expireIn: functions.unixToDateTime(
-                                AuthenticationApiCallsGroup.authenticationCall
-                                    .expireIn(
-                              (_model.loginUser?.jsonBody ?? ''),
-                            )),
-                          );
-                        });
-
                         context.goNamed('home');
                       } else {
                         await showDialog(
