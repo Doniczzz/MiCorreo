@@ -194,13 +194,36 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                 children: [
                   FFButtonWidget(
                     onPressed: () async {
-                      _model.loginUser = await AuthenticationApiCallsGroup
-                          .authenticationCall
-                          .call(
-                        username: _model.textController1.text,
-                        password: _model.textController2.text,
+                      _model.loginUser = await TestCall.call(
+                        firstName: 'gabriel',
+                        lastName: 'vento',
+                        typeIdentification: 'DNI',
+                        number: '95959595',
+                        phoneNumber: '+541160504444',
+                        emailAddress: 'asd@asd.com',
+                        password: 'Rakkuu.1234',
+                        source: 'mobile',
                       );
                       if ((_model.loginUser?.succeeded ?? true)) {
+                        await showDialog(
+                          context: context,
+                          builder: (alertDialogContext) {
+                            return AlertDialog(
+                              title: Text((_model.loginUser?.statusCode ?? 200)
+                                  .toString()),
+                              content: Text((_model.loginUser?.jsonBody ?? '')
+                                  .toString()),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(alertDialogContext),
+                                  child: Text('Ok'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+
                         context.goNamed('home');
                       } else {
                         await showDialog(
