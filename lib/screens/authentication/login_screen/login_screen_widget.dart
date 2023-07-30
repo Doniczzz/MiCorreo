@@ -80,7 +80,6 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                 padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
                 child: TextFormField(
                   controller: _model.textController1,
-                  autofocus: true,
                   obscureText: false,
                   decoration: InputDecoration(
                     labelText: 'Correo electronico',
@@ -122,6 +121,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                     fillColor: Colors.white,
                   ),
                   style: FlutterFlowTheme.of(context).bodyMedium,
+                  keyboardType: TextInputType.emailAddress,
                   validator:
                       _model.textController1Validator.asValidator(context),
                 ),
@@ -194,15 +194,11 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                 children: [
                   FFButtonWidget(
                     onPressed: () async {
-                      _model.loginUser = await TestCall.call(
-                        firstName: 'gabriel',
-                        lastName: 'vento',
-                        typeIdentification: 'DNI',
-                        number: '95959595',
-                        phoneNumber: '+541160504444',
-                        emailAddress: 'asd@asd.com',
-                        password: 'Rakkuu.1234',
-                        source: 'mobile',
+                      _model.loginUser = await AuthenticationApiCallsGroup
+                          .authenticationCall
+                          .call(
+                        username: _model.textController1.text,
+                        password: _model.textController2.text,
                       );
                       if ((_model.loginUser?.succeeded ?? true)) {
                         await showDialog(
