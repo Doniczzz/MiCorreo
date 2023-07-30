@@ -70,7 +70,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                   child: Align(
                     alignment: AlignmentDirectional(0.0, 0.0),
                     child: Text(
-                      FFAppState().accessToken,
+                      dateTimeFormat(
+                          'relative', FFAppState().userSession.expire!),
                       style: FlutterFlowTheme.of(context).bodyMedium,
                     ),
                   ),

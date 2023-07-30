@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/backend/schema/structs/index.dart';
 import 'backend/api_requests/api_manager.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:csv/csv.dart';
@@ -17,8 +18,16 @@ class FFAppState extends ChangeNotifier {
   Future initializePersistedState() async {
     secureStorage = FlutterSecureStorage();
     await _safeInitAsync(() async {
-      _accessToken =
-          await secureStorage.getString('ff_accessToken') ?? _accessToken;
+      if (await secureStorage.read(key: 'ff_userSession') != null) {
+        try {
+          final serializedData =
+              await secureStorage.getString('ff_userSession') ?? '{}';
+          _userSession =
+              UserSessionStruct.fromSerializableMap(jsonDecode(serializedData));
+        } catch (e) {
+          print("Can't decode persisted data type. Error: $e.");
+        }
+      }
     });
   }
 
@@ -29,15 +38,20 @@ class FFAppState extends ChangeNotifier {
 
   late FlutterSecureStorage secureStorage;
 
-  String _accessToken = '';
-  String get accessToken => _accessToken;
-  set accessToken(String _value) {
-    _accessToken = _value;
-    secureStorage.setString('ff_accessToken', _value);
+  UserSessionStruct _userSession = UserSessionStruct();
+  UserSessionStruct get userSession => _userSession;
+  set userSession(UserSessionStruct _value) {
+    _userSession = _value;
+    secureStorage.setString('ff_userSession', _value.serialize());
   }
 
-  void deleteAccessToken() {
-    secureStorage.delete(key: 'ff_accessToken');
+  void deleteUserSession() {
+    secureStorage.delete(key: 'ff_userSession');
+  }
+
+  void updateUserSessionStruct(Function(UserSessionStruct) updateFn) {
+    updateFn(_userSession);
+    secureStorage.setString('ff_userSession', _userSession.serialize());
   }
 }
 
