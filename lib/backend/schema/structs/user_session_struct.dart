@@ -9,7 +9,7 @@ class UserSessionStruct extends BaseStruct {
   UserSessionStruct({
     String? token,
     String? refreshToken,
-    DateTime? expire,
+    int? expire,
   })  : _token = token,
         _refreshToken = refreshToken,
         _expire = expire;
@@ -27,16 +27,17 @@ class UserSessionStruct extends BaseStruct {
   bool hasRefreshToken() => _refreshToken != null;
 
   // "expire" field.
-  DateTime? _expire;
-  DateTime? get expire => _expire;
-  set expire(DateTime? val) => _expire = val;
+  int? _expire;
+  int get expire => _expire ?? 0;
+  set expire(int? val) => _expire = val;
+  void incrementExpire(int amount) => _expire = expire + amount;
   bool hasExpire() => _expire != null;
 
   static UserSessionStruct fromMap(Map<String, dynamic> data) =>
       UserSessionStruct(
         token: data['token'] as String?,
         refreshToken: data['refreshToken'] as String?,
-        expire: data['expire'] as DateTime?,
+        expire: castToType<int>(data['expire']),
       );
 
   static UserSessionStruct? maybeFromMap(dynamic data) =>
@@ -60,7 +61,7 @@ class UserSessionStruct extends BaseStruct {
         ),
         'expire': serializeParam(
           _expire,
-          ParamType.DateTime,
+          ParamType.int,
         ),
       }.withoutNulls;
 
@@ -78,7 +79,7 @@ class UserSessionStruct extends BaseStruct {
         ),
         expire: deserializeParam(
           data['expire'],
-          ParamType.DateTime,
+          ParamType.int,
           false,
         ),
       );
@@ -101,7 +102,7 @@ class UserSessionStruct extends BaseStruct {
 UserSessionStruct createUserSessionStruct({
   String? token,
   String? refreshToken,
-  DateTime? expire,
+  int? expire,
 }) =>
     UserSessionStruct(
       token: token,

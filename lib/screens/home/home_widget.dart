@@ -1,5 +1,8 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -70,10 +73,61 @@ class _HomeWidgetState extends State<HomeWidget> {
                   child: Align(
                     alignment: AlignmentDirectional(0.0, 0.0),
                     child: Text(
-                      dateTimeFormat(
-                          'relative', FFAppState().userSession.expire!),
+                      functions
+                          .secondsToMinutes(FFAppState().userSession.expire),
                       style: FlutterFlowTheme.of(context).bodyMedium,
                     ),
+                  ),
+                ),
+                FFButtonWidget(
+                  onPressed: () async {
+                    _model.apiResultadi =
+                        await AuthenticationApiCallsGroup.endSessionCall.call(
+                      refreshToken: FFAppState().userSession.refreshToken,
+                    );
+                    if ((_model.apiResultadi?.succeeded ?? true)) {
+                      context.goNamed('login_screen');
+                    } else {
+                      await showDialog(
+                        context: context,
+                        builder: (alertDialogContext) {
+                          return AlertDialog(
+                            title: Text((_model.apiResultadi?.statusCode ?? 200)
+                                .toString()),
+                            content: Text((_model.apiResultadi?.jsonBody ?? '')
+                                .toString()),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(alertDialogContext),
+                                child: Text('Ok'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+
+                    setState(() {});
+                  },
+                  text: 'Cerrar sesión',
+                  options: FFButtonOptions(
+                    height: 40.0,
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                    iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    color: FlutterFlowTheme.of(context).primary,
+                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primaryText,
+                        ),
+                    elevation: 3.0,
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
               ],

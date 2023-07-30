@@ -64,7 +64,9 @@ class AuthenticationCall {
 }
 
 class EndSessionCall {
-  Future<ApiCallResponse> call() {
+  Future<ApiCallResponse> call({
+    String? refreshToken = '',
+  }) {
     return ApiManager.instance.makeApiCall(
       callName: 'endSession',
       apiUrl:
@@ -73,8 +75,12 @@ class EndSessionCall {
       headers: {
         ...AuthenticationApiCallsGroup.headers,
       },
-      params: {},
-      bodyType: BodyType.JSON,
+      params: {
+        'client_id': "user-service",
+        'client_secret': "y5HfQcEV12nFfgxgidm7tFmZAZ9MbCwq",
+        'refresh_token': refreshToken,
+      },
+      bodyType: BodyType.X_WWW_FORM_URL_ENCODED,
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,

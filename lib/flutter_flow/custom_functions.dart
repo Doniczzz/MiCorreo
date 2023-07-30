@@ -10,6 +10,9 @@ import 'place.dart';
 import 'uploaded_file.dart';
 import '/backend/schema/structs/index.dart';
 
-DateTime unixToDateTime(int unixTime) {
-  return DateTime.fromMillisecondsSinceEpoch(unixTime * 1000);
+String secondsToMinutes(int seconds) {
+  // transform seconds to minutes and return a string
+  int minutes = (seconds / 60).floor();
+  int remainingSeconds = seconds % 60;
+  return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
 }
