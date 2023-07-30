@@ -80,6 +80,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                 padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
                 child: TextFormField(
                   controller: _model.textController1,
+                  autofocus: true,
                   obscureText: false,
                   decoration: InputDecoration(
                     labelText: 'Correo electronico',
@@ -121,7 +122,6 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                     fillColor: Colors.white,
                   ),
                   style: FlutterFlowTheme.of(context).bodyMedium,
-                  keyboardType: TextInputType.emailAddress,
                   validator:
                       _model.textController1Validator.asValidator(context),
                 ),
@@ -201,24 +201,14 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                         password: _model.textController2.text,
                       );
                       if ((_model.loginUser?.succeeded ?? true)) {
-                        await showDialog(
-                          context: context,
-                          builder: (alertDialogContext) {
-                            return AlertDialog(
-                              title: Text((_model.loginUser?.statusCode ?? 200)
-                                  .toString()),
-                              content: Text((_model.loginUser?.jsonBody ?? '')
-                                  .toString()),
-                              actions: [
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(alertDialogContext),
-                                  child: Text('Ok'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                        setState(() {
+                          FFAppState().accessToken =
+                              AuthenticationApiCallsGroup.authenticationCall
+                                  .token(
+                                    (_model.loginUser?.jsonBody ?? ''),
+                                  )
+                                  .toString();
+                        });
 
                         context.goNamed('home');
                       } else {
@@ -254,10 +244,8 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                       color: FlutterFlowTheme.of(context).primary,
                       textStyle:
                           FlutterFlowTheme.of(context).titleSmall.override(
-                                fontFamily: 'Readex Pro',
+                                fontFamily: 'Poppins',
                                 color: FlutterFlowTheme.of(context).primaryText,
-                                fontSize: 18.0,
-                                letterSpacing: 1.0,
                                 fontWeight: FontWeight.bold,
                               ),
                       elevation: 3.0,
@@ -265,7 +253,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                         color: Colors.transparent,
                         width: 1.0,
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(25.0),
                     ),
                   ),
                 ],
