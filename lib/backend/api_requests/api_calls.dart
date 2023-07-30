@@ -14,9 +14,7 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 class AuthenticationApiCallsGroup {
   static String baseUrl =
       'https://keycloak-iam-clients-dev.apps.ocpbarr.correo.local/auth/realms/users';
-  static Map<String, String> headers = {
-    'ngrok-skip-browser-warning': '69420',
-  };
+  static Map<String, String> headers = {};
   static AuthenticationCall authenticationCall = AuthenticationCall();
   static EndSessionCall endSessionCall = EndSessionCall();
 }
@@ -33,6 +31,7 @@ class AuthenticationCall {
       callType: ApiCallType.POST,
       headers: {
         ...AuthenticationApiCallsGroup.headers,
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       params: {
         'client_id': "user-service",
@@ -54,20 +53,10 @@ class AuthenticationCall {
         response,
         r'''$.access_token''',
       );
-  dynamic refreshToken(dynamic response) => getJsonField(
-        response,
-        r'''$.refresh_token''',
-      );
-  dynamic expireIn(dynamic response) => getJsonField(
-        response,
-        r'''$.expires_in''',
-      );
 }
 
 class EndSessionCall {
-  Future<ApiCallResponse> call({
-    String? refreshToken = '',
-  }) {
+  Future<ApiCallResponse> call() {
     return ApiManager.instance.makeApiCall(
       callName: 'endSession',
       apiUrl:
@@ -76,12 +65,8 @@ class EndSessionCall {
       headers: {
         ...AuthenticationApiCallsGroup.headers,
       },
-      params: {
-        'cliend_id': "user-service",
-        'client_secret': "y5HfQcEV12nFfgxgidm7tFmZAZ9MbCwq",
-        'refresh_token': "${refreshToken}",
-      },
-      bodyType: BodyType.X_WWW_FORM_URL_ENCODED,
+      params: {},
+      bodyType: BodyType.JSON,
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
